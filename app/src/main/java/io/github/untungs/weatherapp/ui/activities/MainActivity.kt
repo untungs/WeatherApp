@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import io.github.untungs.weatherapp.ui.adapters.ForecastListAdapter
 import io.github.untungs.weatherapp.R
 import io.github.untungs.weatherapp.domain.commands.RequestForecastCommand
-import io.github.untungs.weatherapp.domain.model.Forecast
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
@@ -24,12 +23,7 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             val result = RequestForecastCommand(zipCode).execute()
             uiThread {
-                forecastList.adapter = ForecastListAdapter(result,
-                        object : ForecastListAdapter.OnItemClickListener {
-                            override fun invoke(forecast: Forecast) {
-                                toast(forecast.date)
-                            }
-                        })
+                forecastList.adapter = ForecastListAdapter(result) { toast(it.date) }
             }
         }
     }
