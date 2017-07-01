@@ -1,6 +1,5 @@
-package io.github.untungs.weatherapp.data
+package io.github.untungs.weatherapp.data.server
 
-import android.util.Log
 import com.google.gson.Gson
 import java.net.URL
 

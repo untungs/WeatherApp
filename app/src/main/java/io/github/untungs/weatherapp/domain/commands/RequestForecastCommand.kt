@@ -1,6 +1,6 @@
 package io.github.untungs.weatherapp.domain.commands
 
-import io.github.untungs.weatherapp.data.ForecastRequest
+import io.github.untungs.weatherapp.data.server.ForecastRequest
 import io.github.untungs.weatherapp.domain.mappers.ForecastDataMapper
 import io.github.untungs.weatherapp.domain.model.ForecastList
 

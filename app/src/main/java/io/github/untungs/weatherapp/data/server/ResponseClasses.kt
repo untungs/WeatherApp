@@ -1,4 +1,4 @@
-package io.github.untungs.weatherapp.data
+package io.github.untungs.weatherapp.data.server
 
 data class ForecastResult(
         val city: City,

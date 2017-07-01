@@ -1,18 +1,16 @@
 package io.github.untungs.weatherapp.domain.mappers
 
-import io.github.untungs.weatherapp.data.Forecast
-import io.github.untungs.weatherapp.data.ForecastResult
+import io.github.untungs.weatherapp.data.server.Forecast
+import io.github.untungs.weatherapp.data.server.ForecastResult
 import io.github.untungs.weatherapp.domain.model.ForecastList
-import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import io.github.untungs.weatherapp.domain.model.Forecast as ModelForecast
 
 class ForecastDataMapper {
 
-    fun convertFromDataModel(forecast: ForecastResult): ForecastList {
-        return ForecastList(forecast.city.name, forecast.city.country,
-                convertForecastListToDomain(forecast.list))
+    fun convertFromDataModel(forecast: ForecastResult) = with(forecast) {
+        ForecastList(city.id, city.name, city.country, convertForecastListToDomain(list))
     }
 
     private fun convertForecastListToDomain(list: List<Forecast>): List<ModelForecast> {
@@ -22,17 +20,12 @@ class ForecastDataMapper {
         }
     }
 
-    private fun convertForecastItemToDomain(forecast: Forecast): ModelForecast {
-        return ModelForecast(convertDate(forecast.dt),
-                forecast.weather[0].description,
-                forecast.temp.max.toInt(),
-                forecast.temp.min.toInt(),
-                generateIconUrl(forecast.weather[0].icon))
-    }
-
-    private fun convertDate(date: Long): String {
-        val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-        return df.format(date)
+    private fun convertForecastItemToDomain(forecast: Forecast) = with(forecast) {
+        ModelForecast(dt,
+                weather[0].description,
+                temp.max.toInt(),
+                temp.min.toInt(),
+                generateIconUrl(weather[0].icon))
     }
 
     private fun generateIconUrl(iconCode: String) = "http://openweathermap.org/img/w/$iconCode.png"
