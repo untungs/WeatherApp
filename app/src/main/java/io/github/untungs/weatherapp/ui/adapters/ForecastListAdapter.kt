@@ -14,7 +14,7 @@ import java.text.DateFormat
 import java.util.*
 
 class ForecastListAdapter(
-        val weekForecast: ForecastList,
+        val weekForecast: ForecastList?,
         val itemClick: (Forecast) -> Unit): RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -23,10 +23,10 @@ class ForecastListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindForecast(weekForecast[position])
+        if (weekForecast != null) holder?.bindForecast(weekForecast[position])
     }
 
-    override fun getItemCount() = weekForecast.size
+    override fun getItemCount() = weekForecast?.size ?: 0
 
     class ViewHolder(view: View, val itemClick: (Forecast) -> Unit): RecyclerView.ViewHolder(view) {
         fun bindForecast(forecast: Forecast) {

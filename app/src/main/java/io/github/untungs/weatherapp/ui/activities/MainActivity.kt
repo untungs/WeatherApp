@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         forecastList.layoutManager = LinearLayoutManager(this)
+        forecastList.adapter = ForecastListAdapter(null) {}
 
         doAsync {
             val result = RequestForecastCommand(94043).execute()

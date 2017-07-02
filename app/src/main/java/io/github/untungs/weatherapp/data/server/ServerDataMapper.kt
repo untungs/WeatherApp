@@ -7,8 +7,8 @@ import io.github.untungs.weatherapp.domain.model.Forecast as ModelForecast
 
 class ServerDataMapper {
 
-    fun convertToDomain(forecast: ForecastResult) = with(forecast) {
-        ForecastList(city.id, city.name, city.country, convertForecastListToDomain(list))
+    fun convertToDomain(zipCode: Long, forecast: ForecastResult) = with(forecast) {
+        ForecastList(zipCode, city.name, city.country, convertForecastListToDomain(list))
     }
 
     private fun convertForecastListToDomain(list: List<Forecast>): List<ModelForecast> {
