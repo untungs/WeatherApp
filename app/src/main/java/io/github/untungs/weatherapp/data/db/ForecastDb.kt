@@ -1,5 +1,6 @@
 package io.github.untungs.weatherapp.data.db
 
+import io.github.untungs.weatherapp.domain.datasource.ForecastDataSource
 import io.github.untungs.weatherapp.domain.model.ForecastList
 import io.github.untungs.weatherapp.extensions.clear
 import io.github.untungs.weatherapp.extensions.parseList
@@ -10,10 +11,9 @@ import org.jetbrains.anko.db.select
 
 class ForecastDb(
         val forecastDbHelper: ForecastDbHelper = ForecastDbHelper.instance,
-        val dbDataMapper: DbDataMapper = DbDataMapper()) {
+        val dbDataMapper: DbDataMapper = DbDataMapper()) : ForecastDataSource {
 
-    fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
-
+    override fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
         val dailyRequest = "${DayForecastTable.CITY_ID} = ? AND ${DayForecastTable.DATE} >= ?"
         val dailyForecast = select(DayForecastTable.NAME)
                 .whereSimple(dailyRequest, zipCode.toString(), date.toString())

@@ -1,15 +1,13 @@
-package io.github.untungs.weatherapp.domain.mappers
+package io.github.untungs.weatherapp.data.server
 
-import io.github.untungs.weatherapp.data.server.Forecast
-import io.github.untungs.weatherapp.data.server.ForecastResult
 import io.github.untungs.weatherapp.domain.model.ForecastList
 import java.util.*
 import java.util.concurrent.TimeUnit
 import io.github.untungs.weatherapp.domain.model.Forecast as ModelForecast
 
-class ForecastDataMapper {
+class ServerDataMapper {
 
-    fun convertFromDataModel(forecast: ForecastResult) = with(forecast) {
+    fun convertToDomain(forecast: ForecastResult) = with(forecast) {
         ForecastList(city.id, city.name, city.country, convertForecastListToDomain(list))
     }
 

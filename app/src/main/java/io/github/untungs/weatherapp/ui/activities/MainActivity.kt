@@ -17,12 +17,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         forecastList.layoutManager = LinearLayoutManager(this)
 
-        val zipCode = "94043"
-
         doAsync {
-            val result = RequestForecastCommand(zipCode).execute()
+            val result = RequestForecastCommand(94043).execute()
             uiThread {
-                forecastList.adapter = ForecastListAdapter(result) { toast(it.date) }
+                forecastList.adapter = ForecastListAdapter(result) { toast(it.description) }
             }
         }
     }
