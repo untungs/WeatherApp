@@ -8,10 +8,9 @@ import com.squareup.picasso.Picasso
 import io.github.untungs.weatherapp.R
 import io.github.untungs.weatherapp.domain.model.Forecast
 import io.github.untungs.weatherapp.domain.model.ForecastList
-import io.github.untungs.weatherapp.ui.utils.ctx
+import io.github.untungs.weatherapp.extensions.toDateString
+import io.github.untungs.weatherapp.extensions.ctx
 import kotlinx.android.synthetic.main.item_forecast.view.*
-import java.text.DateFormat
-import java.util.*
 
 class ForecastListAdapter(
         val weekForecast: ForecastList?,
@@ -32,7 +31,7 @@ class ForecastListAdapter(
         fun bindForecast(forecast: Forecast) {
             with(forecast) {
                 Picasso.with(itemView.ctx).load(iconUrl).into(itemView.icon)
-                itemView.date.text = convertDate(date)
+                itemView.date.text = date.toDateString()
                 itemView.description.text = description
                 itemView.maxTemperature.text = "$high"
                 itemView.minTemperature.text = "$low"
@@ -40,11 +39,6 @@ class ForecastListAdapter(
                     itemClick(this)
                 }
             }
-        }
-
-        private fun convertDate(date: Long): String {
-            val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-            return dateFormat.format(date)
         }
     }
 }

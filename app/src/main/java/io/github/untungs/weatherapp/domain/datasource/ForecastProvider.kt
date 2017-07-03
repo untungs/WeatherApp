@@ -2,6 +2,7 @@ package io.github.untungs.weatherapp.domain.datasource
 
 import io.github.untungs.weatherapp.data.db.ForecastDb
 import io.github.untungs.weatherapp.data.server.ForecastServer
+import io.github.untungs.weatherapp.domain.model.Forecast
 import io.github.untungs.weatherapp.domain.model.ForecastList
 import io.github.untungs.weatherapp.extensions.firstResult
 
@@ -12,14 +13,17 @@ class ForecastProvider(val sources: List<ForecastDataSource> = ForecastProvider.
         val SOURCES = listOf(ForecastDb(), ForecastServer())
     }
 
-    fun requestByZipCode(zipCode: Long, days: Int): ForecastList = sources.firstResult {
-        requestSource(it, zipCode, days)
+    fun requestByZipCode(zipCode: Long, days: Int): ForecastList = requestToSources {
+        val forecastList = it.requestForecastByZipCode(zipCode, todayTimeSpan())
+        if (forecastList != null && forecastList.size >= days) forecastList else null
     }
 
-    private fun requestSource(source: ForecastDataSource, zipCode: Long, days: Int): ForecastList? {
-        val forecastList = source.requestForecastByZipCode(zipCode, todayTimeSpan())
-        return if (forecastList != null && forecastList.size >= days) forecastList else null
+    fun requestForecast(id: Long): Forecast = requestToSources {
+        it.requestDayForecast(id)
     }
+
+    private fun <T : Any> requestToSources(f: (ForecastDataSource) -> T?): T =
+            sources.firstResult { f(it) }
 
     private fun todayTimeSpan() = System.currentTimeMillis() / DAY_IN_MILLIS * DAY_IN_MILLIS
 }

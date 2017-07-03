@@ -26,6 +26,14 @@ class ForecastDb(
         if (city != null) dbDataMapper.convertToDomain(city) else null
     }
 
+    override fun requestDayForecast(id: Long) = forecastDbHelper.use {
+        val dayForecast = select(DayForecastTable.NAME)
+                .whereSimple("${DayForecastTable.ID} = ?", id.toString())
+                .parseOpt { DayForecast(HashMap(it)) }
+
+        if (dayForecast != null) dbDataMapper.convertDayToDomain(dayForecast) else null
+    }
+
     fun saveForecast(forecastList: ForecastList) = forecastDbHelper.use {
         clear(CityForecastTable.NAME)
         clear(DayForecastTable.NAME)

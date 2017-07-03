@@ -14,4 +14,6 @@ class ForecastServer(
         forecastDb.saveForecast(forecastList)
         return forecastList
     }
+
+    override fun requestDayForecast(id: Long) = throw UnsupportedOperationException()
 }
