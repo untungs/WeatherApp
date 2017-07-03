@@ -1,6 +1,5 @@
 package io.github.untungs.weatherapp.ui.activities
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +8,7 @@ import io.github.untungs.weatherapp.R
 import io.github.untungs.weatherapp.domain.commands.RequestForecastCommand
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
@@ -22,10 +22,9 @@ class MainActivity : AppCompatActivity() {
             val result = RequestForecastCommand(94043).execute()
             uiThread {
                 forecastList.adapter = ForecastListAdapter(result) {
-                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.ID, it.id)
-                    intent.putExtra(DetailActivity.CITY_NAME, result.city)
-                    startActivity(intent)
+                    startActivity<DetailActivity>(
+                            DetailActivity.ID to it.id,
+                            DetailActivity.CITY_NAME to result.city)
                 }
             }
         }
