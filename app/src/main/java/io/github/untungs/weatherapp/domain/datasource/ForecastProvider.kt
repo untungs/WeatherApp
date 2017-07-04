@@ -14,7 +14,7 @@ class ForecastProvider(val sources: List<ForecastDataSource> = ForecastProvider.
     }
 
     fun requestByZipCode(zipCode: Long, days: Int): ForecastList = requestToSources {
-        val forecastList = it.requestForecastByZipCode(zipCode, todayTimeSpan())
+        val forecastList = it.requestForecastByZipCode(zipCode, todayTimeSpan(), days)
         if (forecastList != null && forecastList.size >= days) forecastList else null
     }
 
