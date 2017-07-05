@@ -1,12 +1,12 @@
 package io.github.untungs.weatherapp.ui
 
 import android.app.Application
+import io.github.untungs.weatherapp.extensions.DelegatesExt
 
-class App: Application() {
+class App : Application() {
 
     companion object {
-        lateinit var instance: Application
-            private set
+        var instance: App by DelegatesExt.notNullSingleValue()
     }
 
     override fun onCreate() {
