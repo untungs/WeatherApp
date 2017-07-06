@@ -7,12 +7,14 @@ import android.support.v7.widget.Toolbar
 import io.github.untungs.weatherapp.ui.adapters.ForecastListAdapter
 import io.github.untungs.weatherapp.R
 import io.github.untungs.weatherapp.domain.commands.RequestForecastCommand
+import io.github.untungs.weatherapp.domain.model.ForecastList
 import io.github.untungs.weatherapp.extensions.DelegatesExt
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), ToolbarManager {
     override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
@@ -36,15 +38,17 @@ class MainActivity : AppCompatActivity(), ToolbarManager {
         loadForecast()
     }
 
-    private fun loadForecast() = doAsync {
-        val result = RequestForecastCommand(zipCode).execute()
-        uiThread {
-            forecastList.adapter = ForecastListAdapter(result) {
-                startActivity<DetailActivity>(
-                        DetailActivity.ID to it.id,
-                        DetailActivity.CITY_NAME to result.city)
-            }
-            toolbarTitle = "${result.city} (${result.country})"
+    private fun loadForecast() = async(UI) {
+        val result = bg { RequestForecastCommand(zipCode).execute() }
+        updateUi(result.await())
+    }
+
+    private fun updateUi(weekForecast: ForecastList) {
+        forecastList.adapter = ForecastListAdapter(weekForecast) {
+            startActivity<DetailActivity>(
+                    DetailActivity.ID to it.id,
+                    DetailActivity.CITY_NAME to weekForecast.city)
         }
+        toolbarTitle = "${weekForecast.city} (${weekForecast.country})"
     }
 }
